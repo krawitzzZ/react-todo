@@ -1,0 +1,9 @@
+.App {
+  height: 100%;
+  position: relative;
+  text-align: center;
+}
+
+.App-content {
+  height: calc(100% - 64px);
+}

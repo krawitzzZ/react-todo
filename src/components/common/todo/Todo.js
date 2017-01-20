@@ -20,7 +20,7 @@ export class Todo extends React.PureComponent {
   }
 }
 
-Todo.PropTypes = {
+Todo.propTypes = {
   todo: PropTypes.object.isRequired,
   toggleCompleted: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,

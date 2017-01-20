@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import { Todo } from '../../common';
 import styles from './styles';
@@ -53,20 +53,45 @@ const todos = [
 ];
 
 export class Todos extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.toggleTodo = this.toggleTodo.bind(this);
+    this.editTodo = this.editTodo.bind(this);
+  }
+
+  toggleTodo() {
+    console.log('toggle todo');
+  }
+
+  editTodo() {
+    console.log('edit todo');
+  }
+
   render() {
     return (
       <div className="Todos">
         <Paper style={styles.paper} zDepth={0}>
-          {todos.map((todo, i) => (
-            <Todo todo={todo}
-                  key={i}
-                  toggleCompleted={() => {console.log('toggle todo')}}
-                  edit={() => {console.log('edit todo')}} />
+          {this.props.todos.map((todo, index) => (
+            <Todo
+              todo={todo}
+              key={index}
+              toggleCompleted={this.toggleTodo}
+              edit={this.editTodo}
+            />
           ))}
         </Paper>
       </div>
     );
   }
 }
+
+Todos.propTypes = {
+  todos: PropTypes.array.isRequired,
+};
+
+Todos.defaultProps = {
+  todos: todos || [],
+};
 
 export default Todos;

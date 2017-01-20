@@ -1,6 +1,8 @@
+var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin'); // to install
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin'); // react-dev-utils to install
+var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
@@ -27,8 +29,7 @@ module.exports = {
     pathinfo: true,
 
     // bundle name
-    file: 'static/js/bundle.[hash:8].js',
-
+    filename: 'static/js/bundle.[hash:8].js',
 
     publicPath: publicPath,
   },
@@ -42,13 +43,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/, use: ['babel-loader']
+        enforce: 'pre',
+        test: /\.jsx?$/,
+        use: ['eslint-loader'],
+        include: paths.appSrc,
       },
       {
-        test: /\.css$/, use: ['style-loader', 'css-loader']
+        test: /\.jsx?$/,
+        use: ['babel-loader'],
+        include: paths.appSrc,
       },
       {
-        test: /\.json$/, use: ['json-loader']
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.json$/,
+        use: ['json-loader']
       },
     ]
   },
@@ -63,6 +74,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin(env),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
   ],
   node: {
     fs: 'empty',

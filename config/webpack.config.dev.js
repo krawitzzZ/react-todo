@@ -2,7 +2,6 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin'); // to install
 var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin'); // react-dev-utils to install
-var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
@@ -39,7 +38,7 @@ module.exports = {
 
   },
 
-  // main config: loaders, rules, etc
+  // modules config: loaders and rules
   module: {
     rules: [
       {
@@ -48,18 +47,54 @@ module.exports = {
         use: ['eslint-loader'],
         include: paths.appSrc,
       },
+
+      // all files exclude defined by `test` will be resolved by url-loader
+      // if you define another `test` rule pls update this `exclude` option
+      {
+        exclude: /(\.html$|\.jsx?$|\.scss$|\.css$|\.json$|\.svg$)/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: 'static/media/[name].[hash:8].[ext]',
+            }
+          }
+        ],
+      },
+
       {
         test: /\.jsx?$/,
         use: ['babel-loader'],
         include: paths.appSrc,
       },
+
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+        include: paths.appSrc,
+      },
+
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
       },
+
       {
         test: /\.json$/,
         use: ['json-loader']
+      },
+
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'file',
+            options: {
+              name: 'static/media/[name].[hash:8].[ext]'
+            }
+          }
+        ]
       },
     ]
   },
@@ -74,7 +109,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin(env),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
   node: {
     fs: 'empty',

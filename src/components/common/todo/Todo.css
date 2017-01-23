@@ -1,0 +1,19 @@
+.card {
+  height: 200px;
+  width: 350px;
+  margin: 20px;
+  text-align: center;
+}
+
+.card-text {
+  word-wrap: break-word;
+  height: 65px;
+  overflow: hidden;
+}
+
+.card-actions {
+  padding: 8px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}

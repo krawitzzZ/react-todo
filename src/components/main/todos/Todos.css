@@ -1,3 +1,27 @@
 .Todos {
-  height: calc(100% - 56px);
+  margin-bottom: 56px;
+}
+
+.paper {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.paper-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.add-todo-btn {
+  position: absolute !important;
+  left: 0;
 }

@@ -2,14 +2,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
 import Add from 'material-ui/svg-icons/content/add-circle';
 import All from 'material-ui/svg-icons/action/reorder';
 import Completed from 'material-ui/svg-icons/action/check-circle';
 import Uncompleted from 'material-ui/svg-icons/content/remove-circle';
-import { Todo } from '../../common';
+import { TodoList } from '../../common';
 import * as todoActions from '../../../reducers/todos';
-import styles from './styles';
 import './Todos.css';
 
 export class Todos extends React.Component {
@@ -17,39 +15,61 @@ export class Todos extends React.Component {
     super(props);
 
     this.state = {
-      selectedIndex: 0,
+      filters: {
+        SHOW_ALL: 1,
+        SHOW_COMPLETED: 2,
+        SHOW_UNCOMPLETED: 3,
+      },
+      selected: 1
     };
 
     this.toggleTodo = this.toggleTodo.bind(this);
     this.editTodo = this.editTodo.bind(this);
+    this.changefilter = this.changefilter.bind(this);
+    this.getVisibleTodos = this.getVisibleTodos.bind(this);
   }
 
-  toggleTodo(index) {
-    console.log('toggle todo');
-    this.props.toggleTodo(index);
+  changefilter(filter) {
+    this.setState({
+      selected: filter
+    });
+  }
+
+  toggleTodo(id) {
+    this.props.toggleTodo(id);
   }
 
   editTodo() {
     console.log('edit todo');
   }
 
+  getVisibleTodos() {
+    const todos = this.props.todos;
+    switch (this.state.selected) {
+      case this.state.filters.SHOW_ALL:
+        return todos;
+      case this.state.filters.SHOW_COMPLETED:
+        return todos.filter(todo => todo.completed);
+      case this.state.filters.SHOW_UNCOMPLETED:
+        return todos.filter(todo => !todo.completed);
+    }
+  }
+
   render() {
-    console.log(this.props);
     return (
       <div className="Todos">
-        <Paper style={styles.paper} zDepth={0}>
-          {this.props.todos.map((todo, index) => (
-            <Todo
-              todo={todo}
-              key={index}
-              toggleCompleted={this.toggleTodo.bind(this, index)}
-              edit={this.editTodo}
-            />
-          ))}
+        <Paper className="paper" zDepth={0}>
+          <TodoList
+            className="paper"
+            todos={this.getVisibleTodos()}
+            toggleTodo={this.toggleTodo}
+            editTodo={this.editTodo}
+          />
         </Paper>
-        <Paper style={styles.footerPaper} zDepth={5}>
-          <BottomNavigation selectedIndex={this.state.selectedIndex}>
+        <Paper className="paper-footer" zDepth={5}>
+          <BottomNavigation selectedIndex={this.state.selected}>
             <BottomNavigationItem
+              className="add-todo-btn"
               label="Add Todo"
               icon={<Add />}
               onTouchTap={() => console.log('add')}
@@ -57,17 +77,17 @@ export class Todos extends React.Component {
             <BottomNavigationItem
               label="Show All"
               icon={<All />}
-              onTouchTap={() => console.log('all')}
+              onTouchTap={() => this.changefilter(this.state.filters.SHOW_ALL)}
             />
             <BottomNavigationItem
               label="Show Completed"
               icon={<Completed />}
-              onTouchTap={() => console.log('completed')}
+              onTouchTap={() => this.changefilter(this.state.filters.SHOW_COMPLETED)}
             />
             <BottomNavigationItem
               label="Show Uncompleted"
               icon={<Uncompleted />}
-              onTouchTap={() => console.log('uncompleted')}
+              onTouchTap={() => this.changefilter(this.state.filters.SHOW_UNCOMPLETED)}
             />
           </BottomNavigation>
         </Paper>

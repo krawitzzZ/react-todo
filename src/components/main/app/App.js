@@ -29,10 +29,6 @@ export class App extends React.Component {
     console.log('account settings');
   }
 
-  addTodo() {
-    console.log('addTodo');
-  }
-
   render() {
     return (
       <div className="App">
@@ -42,7 +38,6 @@ export class App extends React.Component {
           showMenuIconButton={false}
           iconElementRight={this.props.user.authenticated ?
                             <AuthenticatedDropMenu
-                              addTodo={this.addTodo}
                               openAccount={this.openAccount}
                               signOut={this.signOut}
                             /> :

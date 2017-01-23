@@ -11,14 +11,12 @@ export const AuthenticatedDropMenu = (props) => (
     targetOrigin={{ horizontal: 'right', vertical: 'top' }}
     anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
   >
-    <MenuItem onTouchTap={props.addTodo} primaryText="Add Todo"/>
     <MenuItem onTouchTap={props.openAccount} primaryText="Account"/>
     <MenuItem onTouchTap={props.signOut} primaryText="Sign Out"/>
   </IconMenu>
 );
 
 AuthenticatedDropMenu.propTypes = {
-  addTodo: PropTypes.func.isRequired,
   openAccount: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
 };

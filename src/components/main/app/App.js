@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import { Todos } from '../../main';
 import { AuthenticatedDropMenu } from '../../stateless';
 import './App.css';
@@ -36,7 +37,7 @@ export class App extends React.Component {
     return (
       <div className="App">
         <AppBar
-          style={{height: 64}}
+          style={{ height: 64 }}
           title="rR"
           showMenuIconButton={false}
           iconElementRight={this.props.user.authenticated ?

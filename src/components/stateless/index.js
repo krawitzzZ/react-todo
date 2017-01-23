@@ -1,1 +1,1 @@
-export { AuthenticatedDropMenu } from './AuthenticatedDropMenu';
+export AuthenticatedDropMenu from './AuthenticatedDropMenu';

@@ -3,8 +3,8 @@ import user from './user';
 import todos from './todos';
 
 const reducer = combineReducers({
-                                  user,
-                                  todos
-                                });
+  user,
+  todos
+});
 
 export default reducer;

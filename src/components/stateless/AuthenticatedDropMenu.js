@@ -22,3 +22,5 @@ AuthenticatedDropMenu.propTypes = {
   openAccount: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
 };
+
+export default AuthenticatedDropMenu;

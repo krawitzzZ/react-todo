@@ -14,7 +14,7 @@ module.exports = {
 
   entry: [
     require.resolve('react-hot-loader/patch'),
-    require.resolve('webpack-hot-middleware/client') + '?path=/__webpack_hmr&timeout=20000',
+    require.resolve('webpack-hot-middleware/client') + '?path=/__webpack_hmr&timeout=20000&reload=true',
     require.resolve('./polyfills'),
     paths.appIndexJs,
   ],

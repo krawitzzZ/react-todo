@@ -9,4 +9,8 @@ export default {
     justifyContent: 'center',
     flexWrap: 'wrap',
   },
+  footerPaper: {
+    position: 'relative',
+    zIndex: '1',
+  },
 };

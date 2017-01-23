@@ -12,7 +12,10 @@ export class Todo extends React.PureComponent {
           {this.props.todo.description}
         </CardText>
         <CardActions style={styles.actions}>
-          <FlatButton onClick={this.props.toggleCompleted} primary={true} label="Complete"/>
+          {!this.props.todo.completed ?
+            <FlatButton onClick={this.props.toggleCompleted} primary={true} label="Complete"/> :
+           <div />
+          }
           <FlatButton onClick={this.props.edit} label="Edit"/>
         </CardActions>
       </Card>

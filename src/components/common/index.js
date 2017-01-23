@@ -1,1 +1,1 @@
-export { Todo } from './todo/Todo';
+export Todo from './todo/Todo';

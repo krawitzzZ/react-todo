@@ -10,46 +10,31 @@ var publicUrl = '';
 var env = getClientEnvironment(publicUrl);
 
 module.exports = {
-  // source map
   devtool: 'cheap-module-source-map',
 
-  context: path.resolve(__dirname, '..'),
-
-  // entry files
   entry: [
+    require.resolve('react-hot-loader/patch'),
+    require.resolve('webpack-hot-middleware/client') + '?path=/__webpack_hmr&timeout=20000',
     require.resolve('./polyfills'),
     paths.appIndexJs,
   ],
 
-  // output destination and file
   output: {
-    // path to output directory
     path: paths.appBuild,
     pathinfo: true,
-
-    // bundle name
     filename: 'static/js/bundle.[hash:8].js',
-
     publicPath: publicPath,
   },
 
-  // instruction for resolving webpack modules
   resolve: {
-
+    extensions: ['.js', '.json', '.jsx'],
+    alias: {
+      'react-native': 'react-native-web'
+    }
   },
 
-  // modules config: loaders and rules
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        use: ['eslint-loader'],
-        include: paths.appSrc,
-      },
-
-      // all files exclude defined by `test` will be resolved by url-loader
-      // if you define another `test` rule pls update this `exclude` option
       {
         exclude: /(\.html$|\.jsx?$|\.scss$|\.css$|\.json$|\.svg$)/,
         use: [
@@ -65,7 +50,14 @@ module.exports = {
 
       {
         test: /\.jsx?$/,
-        use: ['babel-loader'],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true
+            }
+          }
+        ],
         include: paths.appSrc,
       },
 
@@ -109,8 +101,9 @@ module.exports = {
     }),
     new webpack.DefinePlugin(env),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.NamedModulesPlugin(),
   ],
+
   node: {
     fs: 'empty',
     net: 'empty',

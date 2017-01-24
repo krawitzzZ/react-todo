@@ -2,6 +2,10 @@ const TOGGLE_TODO_EDITOR_FOR_ADDING = 'rr/todo/TOGGLE_TODO_EDITOR_FOR_ADDING';
 const TOGGLE_TODO_EDITOR_FOR_EDITING = 'rr/todo/TOGGLE_TODO_EDITOR_FOR_EDITING';
 const CLOSE_TODO_EDITOR = 'rr/todo/CLOSE_TODO_EDITOR';
 
+const FETCH = 'rr/todo/FETCH';
+const FETCH_SUCCESS = 'rr/todo/FETCH_SUCCESS';
+const FETCH_ERROR = 'rr/todo/FETCH_ERROR';
+
 const initTodo = {
   isEditorOpen: false,
   title: '',
@@ -28,6 +32,18 @@ export default function todo(state = initTodo, action) {
         ...initTodo
       };
 
+    case FETCH:
+      console.log('fetching... ', action);
+      return state;
+
+    case FETCH_SUCCESS:
+      console.log('fetching success... ', action);
+      return state;
+
+    case FETCH_ERROR:
+      console.log('fetching error... ', action);
+      return state;
+
     default:
       return state;
   }
@@ -50,4 +66,11 @@ export function closeTodoEditor() {
   return {
     type: CLOSE_TODO_EDITOR,
   };
+}
+
+export function fetchGoogle() {
+  return {
+    types: [FETCH, FETCH_SUCCESS, FETCH_ERROR],
+    promise: (api) => api.get('/')
+  }
 }

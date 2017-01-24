@@ -7,7 +7,9 @@ import All from 'material-ui/svg-icons/action/reorder';
 import Completed from 'material-ui/svg-icons/action/check-circle';
 import Uncompleted from 'material-ui/svg-icons/content/remove-circle';
 import { TodoList } from '../../common';
-import * as todoActions from '../../../reducers/todos';
+import { CreateUpdateTodoForm } from '../../forms';
+import * as todosActions from '../../../reducers/todos';
+import * as todoActions from '../../../reducers/todo';
 import './Todos.css';
 
 export class Todos extends React.Component {
@@ -20,40 +22,79 @@ export class Todos extends React.Component {
         SHOW_COMPLETED: 2,
         SHOW_UNCOMPLETED: 3,
       },
-      selected: 1
+      selected: 1,
     };
-
-    this.toggleTodo = this.toggleTodo.bind(this);
-    this.editTodo = this.editTodo.bind(this);
-    this.changefilter = this.changefilter.bind(this);
-    this.getVisibleTodos = this.getVisibleTodos.bind(this);
   }
 
-  changefilter(filter) {
-    this.setState({
-      selected: filter
-    });
-  }
+  static propTypes = {
+    isTodoEditorOpen: PropTypes.bool.isRequired,
+    todos: PropTypes.array.isRequired,
+    toggleTodoEditorForAdding: PropTypes.func.isRequired,
+    toggleTodoEditorForEditing: PropTypes.func.isRequired,
+    closeTodoEditor: PropTypes.func.isRequired,
+    addTodo: PropTypes.func.isRequired,
+    editTodo: PropTypes.func.isRequired,
+    toggleTodo: PropTypes.func.isRequired,
+  };
 
-  toggleTodo(id) {
-    this.props.toggleTodo(id);
-  }
+  static defaultProps = {
+    isTodoEditorOpen: false,
+    todos: [],
+  };
 
-  editTodo() {
-    console.log('edit todo');
-  }
+  changeFilter = (filter) => {
+    this.setState({ selected: filter });
+  };
 
-  getVisibleTodos() {
+  getVisibleTodos = () => {
     const todos = this.props.todos;
-    switch (this.state.selected) {
-      case this.state.filters.SHOW_ALL:
+    const state = this.state;
+
+    switch (state.selected) {
+      case state.filters.SHOW_ALL:
         return todos;
-      case this.state.filters.SHOW_COMPLETED:
+      case state.filters.SHOW_COMPLETED:
         return todos.filter(todo => todo.completed);
-      case this.state.filters.SHOW_UNCOMPLETED:
+      case state.filters.SHOW_UNCOMPLETED:
         return todos.filter(todo => !todo.completed);
     }
-  }
+  };
+
+  openTodoEditorForAdding = () => {
+    this.props.toggleTodoEditorForAdding();
+  };
+
+  openTodoEditorForEditing = (todo) => {
+    this.props.toggleTodoEditorForEditing(todo);
+  };
+
+  closeTodoEditor = () => {
+    this.todoForm.classList.remove('expanded');
+    setTimeout(() => this.props.closeTodoEditor(), 600);
+  };
+
+  addTodo = (todo) => {
+    todo.id = Math.floor(Math.random() * 10000000 + Math.random() * 10000000);
+    this.props.addTodo(todo);
+  };
+
+  editTodo = (todo) => {
+    this.props.editTodo(todo);
+  };
+
+  toggleTodo = (id) => {
+    this.props.toggleTodo(id);
+  };
+
+  createUpdateTodo = (todo) => {
+    if (todo.id) {
+      this.closeTodoEditor();
+      return this.editTodo(todo);
+    }
+
+    this.closeTodoEditor();
+    this.addTodo(todo);
+  };
 
   render() {
     return (
@@ -63,7 +104,7 @@ export class Todos extends React.Component {
             className="paper"
             todos={this.getVisibleTodos()}
             toggleTodo={this.toggleTodo}
-            editTodo={this.editTodo}
+            openTodoEditor={this.openTodoEditorForEditing}
           />
         </Paper>
         <Paper className="paper-footer" zDepth={5}>
@@ -71,41 +112,53 @@ export class Todos extends React.Component {
             <BottomNavigationItem
               className="add-todo-btn"
               label="Add Todo"
-              icon={<Add />}
-              onTouchTap={() => console.log('add')}
+              icon={<Add color={'rgb(0, 188, 212)'}/>}
+              onTouchTap={this.openTodoEditorForAdding}
             />
             <BottomNavigationItem
               label="Show All"
               icon={<All />}
-              onTouchTap={() => this.changefilter(this.state.filters.SHOW_ALL)}
+              onTouchTap={() => this.changeFilter(this.state.filters.SHOW_ALL)}
             />
             <BottomNavigationItem
               label="Show Completed"
               icon={<Completed />}
-              onTouchTap={() => this.changefilter(this.state.filters.SHOW_COMPLETED)}
+              onTouchTap={() => this.changeFilter(this.state.filters.SHOW_COMPLETED)}
             />
             <BottomNavigationItem
               label="Show Uncompleted"
               icon={<Uncompleted />}
-              onTouchTap={() => this.changefilter(this.state.filters.SHOW_UNCOMPLETED)}
+              onTouchTap={() => this.changeFilter(this.state.filters.SHOW_UNCOMPLETED)}
             />
           </BottomNavigation>
         </Paper>
+        <div
+          ref={(div) => {this.todoForm = div;}}
+          className={`add-todo-card ${this.props.isTodoEditorOpen ? 'expanded' : ''}`}
+        >
+          {this.props.isTodoEditorOpen &&
+            <CreateUpdateTodoForm
+              onSubmit={this.createUpdateTodo}
+              cancel={this.closeTodoEditor}
+            />
+          }
+        </div>
       </div>
     );
   }
 }
 
-Todos.propTypes = {
-  todos: PropTypes.array.isRequired,
-  toggleTodo: PropTypes.func.isRequired,
-};
-
-Todos.defaultProps = {
-  todos: [],
-};
-
 export default connect(
-  state => ({ todos: state.todos }),
-  { toggleTodo: todoActions.toggleTodo }
+  state => ({
+    isTodoEditorOpen: state.todo.isEditorOpen,
+    todos: state.todos,
+  }),
+  {
+    toggleTodoEditorForAdding: todoActions.toggleTodoEditorForAdding,
+    toggleTodoEditorForEditing: todoActions.toggleTodoEditorForEditing,
+    closeTodoEditor: todoActions.closeTodoEditor,
+    addTodo: todosActions.addTodo,
+    editTodo: todosActions.editTodo,
+    toggleTodo: todosActions.toggleTodo,
+  }
 )(Todos);

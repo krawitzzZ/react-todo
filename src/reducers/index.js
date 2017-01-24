@@ -1,10 +1,14 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import user from './user';
+import todo from './todo';
 import todos from './todos';
 
-const reducer = combineReducers({
+const reducers = combineReducers({
+  form: formReducer,
   user,
-  todos
+  todo,
+  todos,
 });
 
-export default reducer;
+export default reducers;

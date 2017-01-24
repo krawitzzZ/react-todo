@@ -5,3 +5,34 @@ html, body, #root {
   padding: 0;
   font-family: 'Roboto', sans-serif;
 }
+
+.bold {
+  font-weight: bold;
+}
+
+.p-s {
+  padding: 10px;
+}
+.p-m {
+  padding: 20px;
+}
+.p-l {
+  padding: 30px;
+}
+
+.m-s {
+  margin: 10px;
+}
+.m-m {
+  margin: 20px;
+}
+.m-l {
+  margin: 30px;
+}
+
+.m-t-s {
+  margin-top: 10px;
+}
+.m-t-m {
+  margin-top: 20px;
+}

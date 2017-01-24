@@ -13,9 +13,20 @@ export class App extends React.Component {
 
     this.login = this.login.bind(this);
     this.signOut = this.signOut.bind(this);
-    this.addTodo = this.addTodo.bind(this);
     this.openAccount = this.openAccount.bind(this);
   }
+
+  static propTypes = {
+    user: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    user: {
+      username: 'anonymous',
+      email: 'anon@example.com',
+      authenticated: true,
+    },
+  };
 
   login() {
     console.log('login');
@@ -50,17 +61,5 @@ export class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  user: PropTypes.object.isRequired,
-};
-
-App.defaultProps = {
-  user: {
-    username: 'anonymous',
-    email: 'anon@example.com',
-    authenticated: true,
-  },
-};
 
 export default App;

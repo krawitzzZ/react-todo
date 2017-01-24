@@ -1,4 +1,5 @@
 const ADD_TODO = 'rr/todos/ADD_TODO';
+const EDIT_TODO = 'rr/todos/EDIT_TODO';
 const TOGGLE_TODO = 'rr/todos/TOGGLE_TODO';
 
 const initTodos = [
@@ -66,6 +67,15 @@ export default function todos(state = initTodos, action) {
         { ...action.data.todo },
       ];
 
+    case EDIT_TODO:
+      return state.map((todo) => {
+        if (todo.id === action.data.todo.id) {
+          return action.data.todo;
+        }
+
+        return todo;
+      });
+
     case TOGGLE_TODO:
       return state.map((todo) => {
         if (todo.id === action.data.id) {
@@ -83,6 +93,13 @@ export default function todos(state = initTodos, action) {
 export function addTodo(todo) {
   return {
     type: ADD_TODO,
+    data: { todo },
+  };
+}
+
+export function editTodo(todo) {
+  return {
+    type: EDIT_TODO,
     data: { todo },
   };
 }

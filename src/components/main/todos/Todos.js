@@ -75,7 +75,6 @@ export class Todos extends React.Component {
   };
 
   addTodo = (todo) => {
-    todo.id = Math.floor(Math.random() * 10000000 + Math.random() * 10000000);
     this.props.addTodo(todo);
   };
 

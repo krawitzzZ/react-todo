@@ -49,11 +49,6 @@ export class CreateUpdateTodoForm extends React.Component {
   static propTypes = {
     ...propTypes,
     cancel: PropTypes.func.isRequired,
-    todo: PropTypes.object,
-  };
-
-  static defaultProps = {
-    todo: {}
   };
 
   onSubmit = (data) => {
@@ -103,7 +98,13 @@ CreateUpdateTodoForm = reduxForm({
 
 
 CreateUpdateTodoForm = connect(
-  state => ({ initialValues: state.todo, })
+  state => ({
+    initialValues: {
+      id: state.todo.id,
+      title: state.todo.title,
+      description: state.todo.description,
+    },
+  })
 )(CreateUpdateTodoForm);
 
 export default CreateUpdateTodoForm;

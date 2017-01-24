@@ -3,6 +3,7 @@ const EDIT_TODO = 'rr/todos/EDIT_TODO';
 const DELETE_TODO = 'rr/todos/DELETE_TODO';
 const TOGGLE_TODO = 'rr/todos/TOGGLE_TODO';
 
+let nextTodoId = 20;
 const initTodos = [
   {
     id: 1,
@@ -63,6 +64,7 @@ const initTodos = [
 export default function todos(state = initTodos, action) {
   switch (action.type) {
     case ADD_TODO:
+      action.data.todo.id = nextTodoId++;
       return [
         ...state,
         { ...action.data.todo },

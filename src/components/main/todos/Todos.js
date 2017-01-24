@@ -34,6 +34,7 @@ export class Todos extends React.Component {
     closeTodoEditor: PropTypes.func.isRequired,
     addTodo: PropTypes.func.isRequired,
     editTodo: PropTypes.func.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
     toggleTodo: PropTypes.func.isRequired,
   };
 
@@ -82,6 +83,10 @@ export class Todos extends React.Component {
     this.props.editTodo(todo);
   };
 
+  deleteTodo = (id) => {
+    this.props.deleteTodo(id);
+  };
+
   toggleTodo = (id) => {
     this.props.toggleTodo(id);
   };
@@ -105,6 +110,7 @@ export class Todos extends React.Component {
             todos={this.getVisibleTodos()}
             toggleTodo={this.toggleTodo}
             openTodoEditor={this.openTodoEditorForEditing}
+            deleteTodo={this.deleteTodo}
           />
         </Paper>
         <Paper className="paper-footer" zDepth={5}>
@@ -159,6 +165,7 @@ export default connect(
     closeTodoEditor: todoActions.closeTodoEditor,
     addTodo: todosActions.addTodo,
     editTodo: todosActions.editTodo,
+    deleteTodo: todosActions.deleteTodo,
     toggleTodo: todosActions.toggleTodo,
   }
 )(Todos);

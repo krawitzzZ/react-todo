@@ -58,7 +58,7 @@ export class CreateUpdateTodoForm extends React.Component {
 
   onSubmit = (data) => {
     for (let prop in data) {
-      if (!data.hasOwnProperty(prop)) continue;
+      if (!data.hasOwnProperty(prop) || typeof data[prop] !== 'string') continue;
       data[prop] = data[prop].trim();
     }
 

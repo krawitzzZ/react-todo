@@ -1,5 +1,6 @@
 const ADD_TODO = 'rr/todos/ADD_TODO';
 const EDIT_TODO = 'rr/todos/EDIT_TODO';
+const DELETE_TODO = 'rr/todos/DELETE_TODO';
 const TOGGLE_TODO = 'rr/todos/TOGGLE_TODO';
 
 const initTodos = [
@@ -76,6 +77,9 @@ export default function todos(state = initTodos, action) {
         return todo;
       });
 
+    case DELETE_TODO:
+      return state.filter((todo) => (todo.id !== action.data.id));
+
     case TOGGLE_TODO:
       return state.map((todo) => {
         if (todo.id === action.data.id) {
@@ -101,6 +105,13 @@ export function editTodo(todo) {
   return {
     type: EDIT_TODO,
     data: { todo },
+  };
+}
+
+export function deleteTodo(id) {
+  return {
+    type: DELETE_TODO,
+    data: { id },
   };
 }
 

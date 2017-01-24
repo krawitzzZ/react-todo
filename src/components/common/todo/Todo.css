@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   height: 200px;
   width: 350px;
   margin: 20px;
@@ -16,4 +17,11 @@
   position: relative;
   display: flex;
   justify-content: space-between;
+}
+
+.delete-todo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5;
 }

@@ -7,6 +7,7 @@ export class TodoList extends React.PureComponent {
     todos: PropTypes.array.isRequired,
     toggleTodo: PropTypes.func.isRequired,
     openTodoEditor: PropTypes.func.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
     className: PropTypes.string,
   };
 
@@ -23,6 +24,7 @@ export class TodoList extends React.PureComponent {
             key={index}
             toggleCompleted={() => this.props.toggleTodo(todo.id)}
             openTodoEditor={() => this.props.openTodoEditor(todo)}
+            delete={() => this.props.deleteTodo(todo.id)}
           />
         ))}
       </Paper>

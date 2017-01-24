@@ -1,34 +1,37 @@
+import axios from 'axios';
+
 const API_ROOT = 'http://swapi.co/api';
-const METHODS = ['get', 'post', 'put', 'patch', 'delete'];
+const defaultHeaders = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json; charset=utf-8',
+};
 
 function formatUrl(path) {
   const adjustedPath = path[0] === '/' ? path : '/' + path;
   return `${API_ROOT}${adjustedPath}`;
 }
 
-function formatGetUrl() {
-
-}
-
 export default class ApiClient {
-  get(path, params) {
+  get(path, params = {}) {
     return new Promise((resolve, reject) => {
-      const request = new Request(formatUrl(path), {
-        method: 'GET',
-        headers: new Headers(),
-        mode: 'cors',
-        cache: 'default',
-        redirect: 'follow',
-      });
+      // const request = new Request(formatGetUrl(path, params), {
+      //   method: 'GET',
+      //   headers: new Headers(defaultHeaders),
+      //   mode: 'cors',
+      //   cache: 'default',
+      //   redirect: 'follow',
+      //   credentials: 'omit',
+      // });
+      // console.log(request.headers.has('Content-Type'));
+      //
+      // if (params.headers) {
+      //   for (let key in params.headers) {
+      //     request.headers.set(key, params.headers[key]);
+      //   }
+      // }
 
-      console.log(request);
-      const request1 = new Request(request);
-      request1.body = {
-        a: 125,
-      };
-      console.log(request1);
-
-      fetch(request)
+      // fetch(request)
+      axios.get(formatUrl(path))
         .then(
           (result) => resolve(result),
           (error) => reject(error),

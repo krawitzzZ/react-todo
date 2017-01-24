@@ -37,7 +37,7 @@ export default function todo(state = initTodo, action) {
       return state;
 
     case FETCH_SUCCESS:
-      console.log('fetching success... ', action);
+      console.log('fetching success... ', action.data);
       return state;
 
     case FETCH_ERROR:

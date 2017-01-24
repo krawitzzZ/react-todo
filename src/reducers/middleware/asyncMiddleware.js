@@ -17,7 +17,7 @@ export default function createAsyncMiddleware(apiClient) {
       const actionPromise = promise(apiClient);
       actionPromise
         .then(
-          (result) => next({ ...rest, result, type: SUCCESS }),
+          (data) => next({ ...rest, data, type: SUCCESS }),
           (error) => next({ ...rest, error, type: FAILURE })
         )
         .catch((error) => {

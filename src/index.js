@@ -1,16 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { Router, browserHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux'
+import { AppContainer } from 'react-hot-loader';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import MainRouter from './router';
-import { AppContainer } from 'react-hot-loader';
+import routes from './router';
+import createStore from './store';
 import './index.css';
 
-export const render = (RouterComponent) => {
+const store = createStore(browserHistory);
+const history = syncHistoryWithStore(browserHistory, store);
+
+export const render = (routesFactory) => {
   ReactDOM.render(
     <AppContainer>
       <MuiThemeProvider>
-          <RouterComponent/>
+        <Provider store={store}>
+          <Router history={history}>
+              {routesFactory(store)}
+          </Router>
+        </Provider>
       </MuiThemeProvider>
     </AppContainer>,
     document.getElementById('root')
@@ -18,4 +29,11 @@ export const render = (RouterComponent) => {
 };
 
 injectTapEventPlugin();
-render(MainRouter);
+render(routes);
+
+if (module.hot) {
+  module.hot.accept('./router', () => {
+    const newRoutesFactory = require('./router').default;
+    render(newRoutesFactory)
+  });
+}

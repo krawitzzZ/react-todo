@@ -103,7 +103,6 @@ export class Todos extends React.Component {
   render() {
     return (
       <div className="Todos">
-        <button onClick={this.props.fetchGoogle}>GOOOOOOOGLE</button>
         <Paper className="paper" zDepth={0}>
           <TodoList
             className="paper"

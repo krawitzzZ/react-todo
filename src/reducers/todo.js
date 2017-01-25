@@ -33,15 +33,12 @@ export default function todo(state = initTodo, action) {
       };
 
     case FETCH:
-      console.log('fetching... ', action);
       return state;
 
     case FETCH_SUCCESS:
-      console.log('fetching success... ', action.data);
       return state;
 
     case FETCH_ERROR:
-      console.log('fetching error... ', action);
       return state;
 
     default:
@@ -71,6 +68,6 @@ export function closeTodoEditor() {
 export function fetchGoogle() {
   return {
     types: [FETCH, FETCH_SUCCESS, FETCH_ERROR],
-    promise: (api) => api.get('/')
+    promise: (api) => api.get('/users/'),
   }
 }

@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import store from './store';
+import MainRouter from './router';
 import { AppContainer } from 'react-hot-loader';
-import App from './components/main/app/App';
 import './index.css';
 
-const render = (Component) => {
+export const render = (RouterComponent) => {
   ReactDOM.render(
     <AppContainer>
       <MuiThemeProvider>
-        <Provider store={store}>
-          <Component />
-        </Provider>
+          <RouterComponent/>
       </MuiThemeProvider>
     </AppContainer>,
     document.getElementById('root')
@@ -22,11 +18,4 @@ const render = (Component) => {
 };
 
 injectTapEventPlugin();
-render(App);
-
-if (module.hot) {
-  module.hot.accept('./components/main/app/App', () => {
-    const NewApp = require('./components/main/app/App').default;
-    render(NewApp)
-  });
-}
+render(MainRouter);

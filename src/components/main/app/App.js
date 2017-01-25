@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
-import { Todos } from '../../main';
 import { AuthenticatedDropMenu } from '../../stateless';
 import './App.css';
 
@@ -18,6 +17,7 @@ export class App extends React.Component {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
+    children: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -55,7 +55,7 @@ export class App extends React.Component {
                             <FlatButton onClick={this.login} label="Login"/>}
         />
         <div className="App-content">
-          <Todos />
+          {this.props.children}
         </div>
       </div>
     );

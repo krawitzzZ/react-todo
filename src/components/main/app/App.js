@@ -7,14 +7,6 @@ import './App.css';
 
 
 export class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.login = this.login.bind(this);
-    this.signOut = this.signOut.bind(this);
-    this.openAccount = this.openAccount.bind(this);
-  }
-
   static propTypes = {
     user: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
@@ -49,10 +41,10 @@ export class App extends React.Component {
           showMenuIconButton={false}
           iconElementRight={this.props.user.authenticated ?
                             <AuthenticatedDropMenu
-                              openAccount={this.openAccount}
-                              signOut={this.signOut}
+                              openAccount={::this.openAccount}
+                              signOut={::this.signOut}
                             /> :
-                            <FlatButton onClick={this.login} label="Login"/>}
+                            <FlatButton onClick={::this.login} label="Login"/>}
         />
         <div className="App-content">
           {this.props.children}

@@ -6,7 +6,7 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import routes from './router';
+import getRoutes from './router';
 import createStore from './store';
 import './index.css';
 
@@ -18,8 +18,8 @@ export const render = (routesFactory) => {
     <AppContainer>
       <MuiThemeProvider>
         <Provider store={store}>
-          <Router history={history}>
-              {routesFactory(store)}
+          <Router key={Math.random()} history={history}>
+            {routesFactory()}
           </Router>
         </Provider>
       </MuiThemeProvider>
@@ -29,11 +29,10 @@ export const render = (routesFactory) => {
 };
 
 injectTapEventPlugin();
-render(routes);
+render(getRoutes);
 
 if (module.hot) {
   module.hot.accept('./router', () => {
-    const newRoutesFactory = require('./router').default;
-    render(newRoutesFactory)
+    render(getRoutes);
   });
 }

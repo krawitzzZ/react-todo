@@ -7,7 +7,7 @@ const initUser = {
   authenticated: false
 };
 
-function user(state = initUser, action) {
+export default function user(state = initUser, action) {
   switch (action.type) {
     case RECEIVE_TOKEN:
       return {
@@ -44,6 +44,3 @@ export function destroyToken() {
     type: DESTROY_TOKEN,
   };
 }
-
-
-export default user

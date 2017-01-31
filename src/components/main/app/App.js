@@ -1,27 +1,24 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import { AuthenticatedDropMenu } from '../../stateless';
+import * as authActions from '../../../reducers/auth';
 import './App.css';
-
 
 export class App extends React.Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
-  };
-
-  static defaultProps = {
-    user: {
-      username: 'anonymous',
-      email: 'anon@example.com',
-      authenticated: true,
-    },
+    isAuthenticated: PropTypes.bool.isRequired,
+    receiveToken: PropTypes.func.isRequired,
   };
 
   login() {
-    console.log('login');
+    this.props.receiveToken({
+      username: 'developer',
+      password: 'asdqweasd'
+    });
   }
 
   signOut() {
@@ -39,7 +36,7 @@ export class App extends React.Component {
           style={{ height: 64 }}
           title="rR"
           showMenuIconButton={false}
-          iconElementRight={this.props.user.authenticated ?
+          iconElementRight={this.props.authenticated ?
                             <AuthenticatedDropMenu
                               openAccount={::this.openAccount}
                               signOut={::this.signOut}
@@ -54,4 +51,12 @@ export class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(
+  state => ({
+    user: state.auth.user,
+    isAuthenticated: state.auth.authenticated,
+  }),
+  {
+    receiveToken: authActions.receiveToken,
+  }
+)(App);

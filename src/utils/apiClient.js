@@ -39,6 +39,7 @@ function checkStatus(response) {
   }
 }
 
+
 export default class ApiClient {
   addHeaders(request, headers) {
     if (typeof headers !== 'undefined') {

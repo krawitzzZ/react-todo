@@ -1,4 +1,5 @@
 import { buildURL } from '../utils';
+import storage from '../utils/storage';
 
 const API_ROOT = 'http://127.0.0.1:8000/api';
 const defaultHeaders = {
@@ -14,7 +15,7 @@ const defaultRequestParams = {
 };
 
 function formatUrl(path) {
-  const adjustedPath = path[0] === '/' ? path : '/' + path;
+  const adjustedPath = path[0] === '/' ? `${path}/` : `/${path}/`;
   return `${API_ROOT}${adjustedPath}`;
 }
 
@@ -24,28 +25,44 @@ function parseResponse (response) {
   if (~contentType.indexOf('text/')) {
     return response.text()
   }
-  else if (~contentType.indexOf('application/json')) {
+
+  if (~contentType.indexOf('application/json')) {
     return response.json();
   }
+
+  return response.json();
 }
 
 function checkStatus(response) {
   if (response.ok) {
     return response;
-  } else {
-    var error = new Error(response.statusText);
-    error.response = parseResponse(response);
-    throw error;
   }
+
+  return parseResponse(response)
+    .then(data => {
+      var error = new Error(response.statusText);
+      error.info = data;
+      error.code = response.status;
+      return Promise.reject(error)
+    });
 }
 
 
-export default class ApiClient {
+class ApiClient {
+  constructor() {
+    this.storage = storage;
+  }
+
   addHeaders(request, headers) {
     if (typeof headers !== 'undefined') {
       for (let key in headers) {
         request.headers.append(key, headers[key]);
       }
+    }
+
+    var token = this.storage.get('JWT');
+    if (token) {
+      request.headers.set('Authorization', `JWT ${token}`);
     }
   }
 
@@ -135,3 +152,6 @@ export default class ApiClient {
     });
   }
 }
+
+const apiClient = new ApiClient();
+export default apiClient;

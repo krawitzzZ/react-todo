@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk';
-import ApiClient from './utils/apiClient';
+import apiClient from './utils/apiClient';
 import createAsyncMiddleware from './reducers/middleware/asyncMiddleware';
 import reducers from './reducers';
 
@@ -13,7 +13,7 @@ export default (history) => createStore(
   preloadedState,
   composeEnhancers(
     applyMiddleware(
-      createAsyncMiddleware(new ApiClient()),
+      createAsyncMiddleware(apiClient),
       routerMiddleware(history),
       thunk,
     )

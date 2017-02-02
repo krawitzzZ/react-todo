@@ -5,6 +5,7 @@ import { Card, CardActions, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
+import validate from './validate';
 import './CreateUpdateTodoForm.css';
 
 const titleField = (field) => (
@@ -29,40 +30,15 @@ const descriptionField = (field) => (
   />
 );
 
-const validate = values => {
-  const errors = {};
-
-  if (!values.title || !values.title.trim()) {
-    errors.title = 'This field can\'t be empty.';
-  } else if (values.title.length > 15) {
-    errors.title = 'Title must be 15 characters or less';
-  }
-
-  if (values.description && values.description.trim() && values.description.length > 150) {
-    errors.description = 'Description must be 150 characters or less';
-  }
-
-  return errors
-};
-
 export class CreateUpdateTodoForm extends React.Component {
   static propTypes = {
     ...propTypes,
     cancel: PropTypes.func.isRequired,
   };
 
-  onSubmit = (data) => {
-    for (let prop in data) {
-      if (!data.hasOwnProperty(prop) || typeof data[prop] !== 'string') continue;
-      data[prop] = data[prop].trim();
-    }
-
-    this.props.submit(data);
-  };
-
   render() {
     return (
-      <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+      <form onSubmit={this.props.handleSubmit}>
         <Paper zDepth={5}>
           <Card className="p-m">
             <CardTitle className="bold" title="Todo"/>
@@ -76,7 +52,7 @@ export class CreateUpdateTodoForm extends React.Component {
               <FlatButton
                 primary
                 label={this.props.initialValues.id ? 'Update Todo' : 'Create Todo'}
-                onTouchTap={this.props.handleSubmit(this.onSubmit)}
+                onTouchTap={this.props.handleSubmit}
                 disabled={this.props.invalid}
               />
               <FlatButton

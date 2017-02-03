@@ -35,9 +35,9 @@ export class TodoList extends React.PureComponent {
           <Todo
             todo={todo}
             key={index}
-            toggleCompleted={() => this.props.toggleTodo(todo.id)}
+            toggleCompleted={() => this.props.toggleTodo(todo)}
             openTodoEditor={() => this.props.openTodoEditor(todo)}
-            delete={() => this.props.deleteTodo(todo.id)}
+            delete={() => this.props.deleteTodo(todo)}
           />
         ))}
         {::this.getEmptyPaper()}

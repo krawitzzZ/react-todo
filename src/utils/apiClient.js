@@ -22,6 +22,10 @@ function formatUrl(path) {
 function parseResponse (response) {
   const contentType = response.headers.get('Content-Type');
 
+  if (!Boolean(contentType)) {
+    return response.text();
+  }
+
   if (~contentType.indexOf('text/')) {
     return response.text()
   }

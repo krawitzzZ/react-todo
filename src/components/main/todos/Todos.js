@@ -87,12 +87,12 @@ export class Todos extends React.Component {
     this.props.editTodo(todo);
   };
 
-  deleteTodo(id) {
-    this.props.deleteTodo(id);
+  deleteTodo(todo) {
+    this.props.deleteTodo(todo);
   };
 
-  toggleTodo(id) {
-    this.props.toggleTodo(id);
+  toggleTodo(todo) {
+    this.props.toggleTodo(todo);
   };
 
   createUpdateTodo(todo) {

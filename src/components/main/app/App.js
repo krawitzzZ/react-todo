@@ -4,7 +4,7 @@ import { asyncConnect } from 'redux-async-connect';
 import { push } from 'react-router-redux';
 import AppBar from 'material-ui/AppBar';
 import { AuthenticatedDropMenu, UnAuthenticatedActions } from '../../stateless';
-import { LoginForm } from '../../forms';
+import { LoginForm, SignUpForm } from '../../forms';
 import * as authActions from '../../../reducers/auth';
 import './App.css';
 
@@ -22,15 +22,24 @@ export class App extends React.Component {
     children: PropTypes.object.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
     isLoadingToken: PropTypes.bool.isRequired,
+    isLoadingSignUp: PropTypes.bool.isRequired,
     user: PropTypes.object,
-    error: PropTypes.object,
+    loginError: PropTypes.object,
+    signUpError: PropTypes.object,
     pushState: PropTypes.func.isRequired,
     login: PropTypes.func.isRequired,
+    signUp: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     loadUser: PropTypes.func.isRequired,
+    refreshToken: PropTypes.func.isRequired,
+    cleanErrors: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
+    if (this.props.isAuthenticated) {
+      this.props.refreshToken();
+    }
+
     if (this.props.user) {
       this.props.pushState('/todos');
     }
@@ -41,14 +50,20 @@ export class App extends React.Component {
       this.props.loadUser();
     }
 
+
     if (!this.props.user && nextProps.user) {
       this.closeLoginModal();
+      this.closeSignUpModal();
       this.props.pushState('/todos');
     }
 
     if (this.props.user && !nextProps.user) {
       this.props.pushState('/');
     }
+  }
+
+  signUp(credentials) {
+    this.props.signUp(credentials);
   }
 
   login(credentials) {
@@ -69,6 +84,7 @@ export class App extends React.Component {
 
   closeLoginModal() {
     this.setState({ isLoginModalOpen: false });
+    this.props.cleanErrors();
   }
 
   openSignUpModal() {
@@ -77,6 +93,7 @@ export class App extends React.Component {
 
   closeSignUpModal() {
     this.setState({ isSignUpModalOpen: false });
+    this.props.cleanErrors();
   }
 
   render() {
@@ -105,7 +122,14 @@ export class App extends React.Component {
             isLoading={this.props.isLoadingToken}
             cancel={::this.closeLoginModal}
             onSubmit={::this.login}
-            loginError={this.props.error}
+            loginError={this.props.loginError}
+          />
+          <SignUpForm
+            isOpen={this.state.isSignUpModalOpen}
+            isLoading={this.props.isLoadingSignUp}
+            cancel={::this.closeSignUpModal}
+            onSubmit={::this.signUp}
+            signUpError={this.props.signUpError}
           />
         </div>
       </div>
@@ -116,15 +140,20 @@ export class App extends React.Component {
 const ConnectedApp = connect(
   state => ({
     user: state.auth.user,
-    error: state.auth.error,
+    loginError: state.auth.tokenError,
+    signUpError: state.auth.signUpError,
     isAuthenticated: state.auth.authenticated,
     isLoadingToken: state.auth.loadingToken,
+    isLoadingSignUp: state.auth.loadingSignUp,
   }),
   {
     pushState: push,
     login: authActions.receiveToken,
+    signUp: authActions.signUp,
     logout: authActions.destroyToken,
     loadUser: authActions.loadUser,
+    refreshToken: authActions.updateToken,
+    cleanErrors: authActions.cleanErrors,
   }
 )(App);
 

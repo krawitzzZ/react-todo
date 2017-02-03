@@ -64,10 +64,3 @@ export function closeTodoEditor() {
     type: CLOSE_TODO_EDITOR,
   };
 }
-
-export function fetchGoogle() {
-  return {
-    types: [FETCH, FETCH_SUCCESS, FETCH_ERROR],
-    promise: (api) => api.get('/users/'),
-  }
-}

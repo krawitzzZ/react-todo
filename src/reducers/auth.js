@@ -158,14 +158,14 @@ export function isUserLoaded(globalState) {
 export function loadUser() {
   return {
     types: [LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAIL],
-    promise: (api) => api.get('/users/me'),
+    promise: (api) => api.get(`/users/me`),
   };
 }
 
 export function receiveToken(data) {
   return {
     types: [RECEIVE_TOKEN, RECEIVE_TOKEN_SUCCESS, RECEIVE_TOKEN_FAIL],
-    promise: (api) => api.post('/auth', { data }),
+    promise: (api) => api.post(`/auth`, { data }),
   };
 }
 
@@ -174,14 +174,14 @@ export function updateToken() {
 
   return {
     types: [UPDATE_TOKEN, UPDATE_TOKEN_SUCCESS, UPDATE_TOKEN_FAIL],
-    promise: (api) => api.post('/auth-token-refresh', { data }),
+    promise: (api) => api.post(`/auth-token-refresh`, { data }),
   };
 }
 
 export function signUp(data) {
   return {
     types: [SIGN_UP, SIGN_UP_SUCCESS, SIGN_UP_FAIL],
-    promise: (api) => api.post('/users', { data }),
+    promise: (api) => api.post(`/users`, { data }),
   };
 }
 

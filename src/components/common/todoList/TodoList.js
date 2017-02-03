@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import { Todo } from '../';
+import './TodoList.scss';
+import styles from './styles';
 
 export class TodoList extends React.PureComponent {
   static propTypes = {
@@ -11,14 +13,25 @@ export class TodoList extends React.PureComponent {
     className: PropTypes.string,
   };
 
-  static defaultProps = {
-    todos: [],
-  };
+  getEmptyPaper() {
+    if (Boolean(this.props.todos.length)) {
+      return null;
+    }
+
+    return (
+      <div className="Todo-list">
+        <Paper style={styles.paper} zDepth={3} rounded={false}>
+          <h1>There are no todos yet :(</h1>
+          <h2>Create one right now!</h2>
+        </Paper>
+      </div>
+    );
+  }
 
   render() {
     return (
       <Paper className={this.props.className} zDepth={0}>
-        {this.props.todos.map((todo, index) => (
+        {Boolean(this.props.todos.length) && this.props.todos.map((todo, index) => (
           <Todo
             todo={todo}
             key={index}
@@ -27,6 +40,7 @@ export class TodoList extends React.PureComponent {
             delete={() => this.props.deleteTodo(todo.id)}
           />
         ))}
+        {::this.getEmptyPaper()}
       </Paper>
     );
   }

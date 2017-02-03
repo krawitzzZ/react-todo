@@ -1,112 +1,121 @@
+const LOAD_TODOS = 'rr/todos/LOAD_TODOS';
+const LOAD_TODOS_SUCCESS = 'rr/todos/LOAD_TODOS_SUCCESS';
+const LOAD_TODOS_FAIL = 'rr/todos/LOAD_TODOS_FAIL';
+
 const ADD_TODO = 'rr/todos/ADD_TODO';
+const ADD_TODO_SUCCESS = 'rr/todos/ADD_TODO_SUCCESS';
+const ADD_TODO_FAIL = 'rr/todos/ADD_TODO_FAIL';
+
 const EDIT_TODO = 'rr/todos/EDIT_TODO';
+const EDIT_TODO_SUCCESS = 'rr/todos/EDIT_TODO_SUCCESS';
+const EDIT_TODO_FAIL = 'rr/todos/EDIT_TODO_FAIL';
+
 const DELETE_TODO = 'rr/todos/DELETE_TODO';
 const TOGGLE_TODO = 'rr/todos/TOGGLE_TODO';
 
-let nextTodoId = 20;
-const initTodos = [
-  {
-    id: 1,
-    title: 'aweqwfwfasfwfqwfafawfawfwf',
-    description: 'lorem ipsum',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'todo1',
-    description: 'loragasggwwgem ipsum',
-    completed: false,
-  },
-  {
-    id: 3,
-    title: 'todo2',
-    description: 'ssssfwwq fqwgqwgasg',
-    completed: false,
-  },
-  {
-    id: 4,
-    title: 'todo3',
-    description: 'wfwasf wqf qw sa',
-    completed: false,
-  },
-  {
-    id: 5,
-    title: 'todo4',
-    description: 'qwd wqd afw qf ',
-    completed: false,
-  },
-  {
-    id: 6,
-    title: 'todo4',
-    description: 'qwd wqd afw wqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqfas f qfa fgqwgasnkifnaksfjaisfj asfaiofhkjdiju asidqopwjhwifjqajfgpoj apjfqiwfgjpqajnbnsfpawf asfijqwpofjapgpojzopj jaspjfgpogjpqwiehnhpwq qf ',
-    completed: false,
-  },
-  {
-    id: 7,
-    title: 'todo4',
-    description: 'qwd wqd afw qf ',
-    completed: false,
-  },
-  {
-    id: 8,
-    title: 'todo4',
-    description: 'qwd wqd afw qf ',
-    completed: false,
-  },
-  {
-    id: 9,
-    title: 'todo4',
-    description: 'qwd wqd afw qf ',
-    completed: false,
-  },
-];
+const initTodos = {
+  loadingTodos: false,
+  loadingAddTodo: false,
+  loadingEditTodo: false,
+  loadingError: null,
+  addTodoError: null,
+  editTodoError: null,
+  list: [],
+};
 
 export default function todos(state = initTodos, action) {
   switch (action.type) {
-    case ADD_TODO:
-      action.data.todo.id = nextTodoId++;
-      return [
+    case LOAD_TODOS:
+      return {
         ...state,
-        { ...action.data.todo },
-      ];
+        loadingTodos: true,
+        loadingError: null,
+      };
+
+    case LOAD_TODOS_SUCCESS:
+      return {
+        ...state,
+        loadingTodos: false,
+        list: action.data.results,
+      };
+
+    case LOAD_TODOS_FAIL:
+      return {
+        ...state,
+        loadingTodos: false,
+        loadingError: action.error,
+      };
+
+    case ADD_TODO:
+      return {
+        ...state,
+        loadingAddTodo: true,
+        addTodoError: null,
+      };
+
+    case ADD_TODO_SUCCESS:
+      return {
+        ...state,
+        loadingAddTodo: false,
+        list: state.list.concat(action.data),
+      };
+
+    case ADD_TODO_FAIL:
+      return {
+        ...state,
+        loadingAddTodo: false,
+        addTodoError: action.error,
+      };
 
     case EDIT_TODO:
-      return state.map((todo) => {
-        if (todo.id === action.data.todo.id) {
-          return action.data.todo;
-        }
+      return {
+        ...state,
+        loadingEditTodo: true,
+        editTodoError: null,
+      };
 
-        return todo;
-      });
+    case EDIT_TODO_SUCCESS:
+      const todo = action.data;
+      const list = state.list.map(item => item);
+      const index = list.findIndex(item => item.id === todo.id);
+      list.splice(index, 1, todo);
 
-    case DELETE_TODO:
-      return state.filter((todo) => (todo.id !== action.data.id));
+      return {
+        ...state,
+        loadingEditTodo: false,
+        list
+      };
 
-    case TOGGLE_TODO:
-      return state.map((todo) => {
-        if (todo.id === action.data.id) {
-          return { ...todo, completed: !todo.completed };
-        }
-
-        return todo;
-      });
+    case EDIT_TODO_FAIL:
+      return {
+        ...state,
+        loadingEditTodo: false,
+        editTodoError: action.error,
+      };
 
     default:
       return state;
   }
 }
 
-export function addTodo(todo) {
+export function fetchTodos() {
   return {
-    type: ADD_TODO,
-    data: { todo },
+    types: [LOAD_TODOS, LOAD_TODOS_SUCCESS, LOAD_TODOS_FAIL],
+    promise: (api) => api.get(`/todos`),
+  };
+}
+
+export function addTodo(data) {
+  return {
+    types: [ADD_TODO, ADD_TODO_SUCCESS, ADD_TODO_FAIL],
+    promise: (api) => api.post(`/todos`, { data }),
   };
 }
 
 export function editTodo(todo) {
   return {
-    type: EDIT_TODO,
-    data: { todo },
+    types: [EDIT_TODO, EDIT_TODO_SUCCESS, EDIT_TODO_FAIL],
+    promise: (api) => api.put(`/todos/${todo.id}`, { data: todo }),
   };
 }
 

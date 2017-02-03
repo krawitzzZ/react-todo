@@ -29,19 +29,24 @@ export class Todos extends React.Component {
   static propTypes = {
     isTodoEditorOpen: PropTypes.bool.isRequired,
     todos: PropTypes.array.isRequired,
-    toggleTodoEditorForAdding: PropTypes.func.isRequired,
-    toggleTodoEditorForEditing: PropTypes.func.isRequired,
-    closeTodoEditor: PropTypes.func.isRequired,
+    fetchTodos: PropTypes.func.isRequired,
+    toggleTodo: PropTypes.func.isRequired,
     addTodo: PropTypes.func.isRequired,
     editTodo: PropTypes.func.isRequired,
     deleteTodo: PropTypes.func.isRequired,
-    toggleTodo: PropTypes.func.isRequired,
+    toggleTodoEditorForAdding: PropTypes.func.isRequired,
+    toggleTodoEditorForEditing: PropTypes.func.isRequired,
+    closeTodoEditor: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     isTodoEditorOpen: false,
     todos: [],
   };
+
+  componentDidMount() {
+    this.props.fetchTodos();
+  }
 
   changeFilter = (filter) => {
     this.setState({ selected: filter });
@@ -61,36 +66,36 @@ export class Todos extends React.Component {
     }
   };
 
-  openTodoEditorForAdding = () => {
+  openTodoEditorForAdding() {
     this.props.toggleTodoEditorForAdding();
   };
 
-  openTodoEditorForEditing = (todo) => {
+  openTodoEditorForEditing(todo) {
     this.props.toggleTodoEditorForEditing(todo);
   };
 
-  closeTodoEditor = () => {
+  closeTodoEditor() {
     this.todoForm.classList.remove('expanded');
     setTimeout(() => this.props.closeTodoEditor(), 600);
   };
 
-  addTodo = (todo) => {
+  addTodo(todo) {
     this.props.addTodo(todo);
   };
 
-  editTodo = (todo) => {
+  editTodo(todo) {
     this.props.editTodo(todo);
   };
 
-  deleteTodo = (id) => {
+  deleteTodo(id) {
     this.props.deleteTodo(id);
   };
 
-  toggleTodo = (id) => {
+  toggleTodo(id) {
     this.props.toggleTodo(id);
   };
 
-  createUpdateTodo = (todo) => {
+  createUpdateTodo(todo) {
     if (todo.id) {
       this.closeTodoEditor();
       return this.editTodo(todo);
@@ -106,10 +111,10 @@ export class Todos extends React.Component {
         <Paper className="paper" zDepth={0}>
           <TodoList
             className="paper"
-            todos={this.getVisibleTodos()}
-            toggleTodo={this.toggleTodo}
-            openTodoEditor={this.openTodoEditorForEditing}
-            deleteTodo={this.deleteTodo}
+            todos={::this.getVisibleTodos()}
+            toggleTodo={::this.toggleTodo}
+            openTodoEditor={::this.openTodoEditorForEditing}
+            deleteTodo={::this.deleteTodo}
           />
         </Paper>
         <Paper className="paper-footer" zDepth={5}>
@@ -118,7 +123,7 @@ export class Todos extends React.Component {
               className="add-todo-btn"
               label="Add Todo"
               icon={<Add color={'rgb(0, 188, 212)'}/>}
-              onTouchTap={this.openTodoEditorForAdding}
+              onTouchTap={::this.openTodoEditorForAdding}
             />
             <BottomNavigationItem
               label="Show All"
@@ -143,8 +148,8 @@ export class Todos extends React.Component {
         >
           {this.props.isTodoEditorOpen &&
             <CreateUpdateTodoForm
-              onSubmit={this.createUpdateTodo}
-              cancel={this.closeTodoEditor}
+              onSubmit={::this.createUpdateTodo}
+              cancel={::this.closeTodoEditor}
             />
           }
         </div>
@@ -156,16 +161,17 @@ export class Todos extends React.Component {
 export default connect(
   state => ({
     isTodoEditorOpen: state.todo.isEditorOpen,
-    todos: state.todos,
+    todos: state.todos.list,
   }),
   {
     toggleTodoEditorForAdding: todoActions.toggleTodoEditorForAdding,
     toggleTodoEditorForEditing: todoActions.toggleTodoEditorForEditing,
     closeTodoEditor: todoActions.closeTodoEditor,
+
+    fetchTodos: todosActions.fetchTodos,
+    toggleTodo: todosActions.toggleTodo,
     addTodo: todosActions.addTodo,
     editTodo: todosActions.editTodo,
     deleteTodo: todosActions.deleteTodo,
-    toggleTodo: todosActions.toggleTodo,
-    fetchGoogle: todoActions.fetchGoogle,
   }
 )(Todos);

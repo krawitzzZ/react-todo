@@ -81,7 +81,7 @@ export default function auth(state = initAuth, action) {
         user: null,
         loadingSignUp: false,
         signUpError: action.error,
-        authenticated: Boolean(action.data.token),
+        authenticated: false,
       };
 
     case RECEIVE_TOKEN:
@@ -106,7 +106,7 @@ export default function auth(state = initAuth, action) {
         user: null,
         loadingToken: false,
         tokenError: action.error,
-        authenticated: Boolean(action.data.token),
+        authenticated: false,
       };
 
     case UPDATE_TOKEN:
@@ -131,7 +131,7 @@ export default function auth(state = initAuth, action) {
         user: null,
         loadingTokenUpdate: false,
         tokenUpdateError: action.error,
-        authenticated: Boolean(action.data.token),
+        authenticated: false,
       };
 
     case CLEAN_ERRORS:

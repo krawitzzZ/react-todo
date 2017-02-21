@@ -1,7 +1,7 @@
 import { buildURL } from '../utils';
 import storage from '../utils/storage';
 
-const API_ROOT = 'http://127.0.0.1:8000/api';
+const API_ROOT = 'https://todozz.herokuapp.com/api';
 const defaultHeaders = {
   'Accept': 'application/json;text/*',
   'Content-Type': 'application/json;charset=utf-8',
@@ -44,7 +44,7 @@ function checkStatus(response) {
 
   return parseResponse(response)
     .then(data => {
-      var error = new Error(response.statusText);
+      let error = new Error(response.statusText);
       error.info = data;
       error.code = response.status;
       return Promise.reject(error)
@@ -64,7 +64,7 @@ class ApiClient {
       }
     }
 
-    var token = this.storage.get('JWT');
+    let token = this.storage.get('JWT');
     if (token) {
       request.headers.set('Authorization', `JWT ${token}`);
     }

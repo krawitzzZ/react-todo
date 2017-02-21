@@ -47,13 +47,9 @@ export class App extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.isAuthenticated && nextProps.isAuthenticated) {
-      this.props.loadUser();
-    }
-
-
-    if (!this.props.user && nextProps.user) {
       this.closeLoginModal();
       this.closeSignUpModal();
+      this.props.loadUser();
       this.props.pushState('/todos');
     }
 
@@ -72,10 +68,6 @@ export class App extends React.Component {
 
   signOut() {
     this.props.logout();
-  }
-
-  openAccount() {
-    console.log('account settings');
   }
 
   openLoginModal() {
@@ -101,11 +93,10 @@ export class App extends React.Component {
       <div className="App">
         <AppBar
           style={{ height: 64 }}
-          title="rR"
+          title="Todos"
           showMenuIconButton={false}
-          iconElementRight={this.props.user ?
+          iconElementRight={this.props.isAuthenticated ?
                             <AuthenticatedDropMenu
-                              openAccount={::this.openAccount}
                               signOut={::this.signOut}
                             /> :
                             <UnAuthenticatedActions
@@ -161,8 +152,9 @@ export default asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
     const state = getState();
+    const { authenticated, loadingUser } = state.auth;
 
-    if (state.auth.authenticated && !authActions.isUserLoaded(state) && !state.auth.loadingUser) {
+    if (authenticated && !authActions.isUserLoaded(state) && !loadingUser) {
       promises.push(dispatch(authActions.loadUser()));
     }
 

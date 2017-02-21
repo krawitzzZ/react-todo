@@ -37,6 +37,7 @@ export class Todos extends React.Component {
     toggleTodoEditorForAdding: PropTypes.func.isRequired,
     toggleTodoEditorForEditing: PropTypes.func.isRequired,
     closeTodoEditor: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -48,8 +49,8 @@ export class Todos extends React.Component {
     this.props.fetchTodos();
   }
 
-  changeFilter = (filter) => {
-    this.setState({ selected: filter });
+  changeFilter(selected) {
+    this.setState({ selected });
   };
 
   getVisibleTodos = () => {
@@ -111,6 +112,7 @@ export class Todos extends React.Component {
         <Paper className="paper" zDepth={0}>
           <TodoList
             className="paper"
+            loading={this.props.loading}
             todos={::this.getVisibleTodos()}
             toggleTodo={::this.toggleTodo}
             openTodoEditor={::this.openTodoEditorForEditing}
@@ -162,6 +164,7 @@ export default connect(
   state => ({
     isTodoEditorOpen: state.todo.isEditorOpen,
     todos: state.todos.list,
+    loading: state.todos.loadingTodos,
   }),
   {
     toggleTodoEditorForAdding: todoActions.toggleTodoEditorForAdding,

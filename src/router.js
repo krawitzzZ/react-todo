@@ -14,9 +14,9 @@ export default (store) => {
     }
 
     function checkAuth() {
-      const { auth: { user } } = store.getState();
+      const { auth: { authenticated } } = store.getState();
 
-      if (!user) {
+      if (!authenticated) {
         replace('/');
       }
 
